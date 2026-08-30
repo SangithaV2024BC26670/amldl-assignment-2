@@ -12,9 +12,9 @@
 
 | File | What it is |
 |---|---|
-| `Concept_Note_AdventureWorks_Bike_Buyer_Propensity.docx` | Concept note — problem statement, dataset, EDA, methodology |
-| `AMLDL_Assignment2_AdventureWorks_Progress_Report.docx` | Progress report — 15 tables, 16 figures |
-| `AMLDL_DeepLearning_Report.docx` | Deep-learning report — entity-embedding network vs the benchmark |
+| `2024BC26670_Sangitha_V_Concept_Note.docx` | Concept note — problem statement, dataset, EDA, methodology |
+| `2024BC26670_Sangitha_V.docx` | Progress report — 15 tables, 16 figures |
+| `2024BC26670_Sangitha_V_Deep_Learning_Report.docx` | Deep-learning report — entity-embedding network vs the benchmark |
 | `AMLDL_Assignment2_AdventureWorks.ipynb` | Full notebook — all code, executed, with outputs and plots inline |
 
 ```
