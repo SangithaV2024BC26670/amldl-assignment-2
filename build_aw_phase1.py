@@ -415,6 +415,7 @@ table_from_df(pd.DataFrame([
     {"Category": "Interpretation", "Tools / Libraries": "Permutation importance, calibration curves, decile lift analysis"},
     {"Category": "Future DL extension", "Tools / Libraries": "PyTorch - entity-embedding neural network (Phase 3)"},
     {"Category": "Environment", "Tools / Libraries": "Jupyter Notebook / Google Colab"},
+    {"Category": "Code repository", "Tools / Libraries": "https://github.com/SangithaV2024BC26670/amldl-assignment2-bike-buyer"},
 ]), widths=[1.6, 4.7])
 
 # ==========================================================================

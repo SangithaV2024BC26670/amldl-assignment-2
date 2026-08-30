@@ -393,7 +393,7 @@ table_from_df(pd.DataFrame([
     {"Item": "Figures", "Value": "outputs_dl/figures/ (3 plots)"},
     {"Item": "Result tables", "Value": "outputs_dl/tables/ (6 files)"},
     {"Item": "Benchmark comparison source", "Value": "outputs/tables/"},
-    {"Item": "Colab / Git link", "Value": "[paste your link here before submission]"},
+    {"Item": "Git repository", "Value": "https://github.com/SangithaV2024BC26670/amldl-assignment2-bike-buyer"},
 ]), widths=[1.8, 4.5])
 
 doc.save(OUT)
