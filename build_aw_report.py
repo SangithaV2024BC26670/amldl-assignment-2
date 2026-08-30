@@ -525,7 +525,7 @@ table_from_df(pd.DataFrame([
      + format(S["margin_per_sale_assumed"], ".0f") + ", cost per contact "
      + format(S["cost_per_contact_assumed"], ".2f") + " - illustrative, not "
      "derived from the data"},
-    {"Item": "Git repository", "Value": "https://github.com/SangithaV2024BC26670/amldl-assignment2-bike-buyer"},
+    {"Item": "Git repository", "Value": "https://github.com/SangithaV2024BC26670/amldl-assignment-2"},
 ]), widths=[1.6, 4.7])
 
 doc.save(OUT)
