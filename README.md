@@ -23,7 +23,7 @@
 | `2024BC26670_Sangitha_V_Concept_Note.docx` | Concept note — problem statement, dataset, EDA, methodology |
 | `2024BC26670_Sangitha_V.docx` | Progress report — 15 tables, 16 figures |
 | `2024BC26670_Sangitha_V_Deep_Learning_Report.docx` | Deep-learning report — entity-embedding network vs the benchmark |
-| `AMLDL_Assignment2_AdventureWorks.ipynb` | Full notebook — all code, executed, with outputs and plots inline |
+| `2024BC26670_Sangitha_V.ipynb` | Full notebook — all code, executed, with outputs and plots inline |
 
 ```
 data/adventureworks/    3 source CSVs
@@ -33,13 +33,13 @@ outputs_dl/             3 figures, 7 tables, trained model, run log
 
 ## Running the notebook
 
-`AMLDL_Assignment2_AdventureWorks.ipynb` is self-contained — it downloads the
+`2024BC26670_Sangitha_V.ipynb` is self-contained — it downloads the
 three source CSVs on first run, so it works in Google Colab with no setup.
 
 Open in Colab and **Runtime → Run all**, or locally:
 
 ```bash
-jupyter notebook AMLDL_Assignment2_AdventureWorks.ipynb
+jupyter notebook 2024BC26670_Sangitha_V.ipynb
 ```
 
 It runs the whole pipeline end to end: data preparation, feature selection,
