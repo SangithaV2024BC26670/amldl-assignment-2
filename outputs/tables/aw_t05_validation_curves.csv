@@ -1,0 +1,20 @@
+Curve,Value,TrainAUC,CV_AUC
+Validation curve - Random Forest tree depth,3,0.8329,0.8293
+Validation curve - Random Forest tree depth,5,0.8526,0.8431
+Validation curve - Random Forest tree depth,8,0.8928,0.8541
+Validation curve - Random Forest tree depth,12,0.969,0.8509
+Validation curve - Random Forest tree depth,16,0.9989,0.8382
+Validation curve - Random Forest tree depth,20,1.0,0.83
+Validation curve - Random Forest tree depth,None,1.0,0.8281
+Validation curve - Random Forest min samples per leaf,1,1.0,0.8281
+Validation curve - Random Forest min samples per leaf,2,0.9896,0.8414
+Validation curve - Random Forest min samples per leaf,4,0.9555,0.8499
+Validation curve - Random Forest min samples per leaf,8,0.9213,0.8545
+Validation curve - Random Forest min samples per leaf,16,0.8955,0.8556
+Validation curve - Random Forest min samples per leaf,32,0.8773,0.8545
+Validation curve - Boosting learning rate,0.01,0.8735,0.86
+Validation curve - Boosting learning rate,0.03,0.8858,0.8634
+Validation curve - Boosting learning rate,0.05,0.8961,0.8632
+Validation curve - Boosting learning rate,0.1,0.8985,0.8625
+Validation curve - Boosting learning rate,0.2,0.9055,0.86
+Validation curve - Boosting learning rate,0.3,0.9051,0.8585

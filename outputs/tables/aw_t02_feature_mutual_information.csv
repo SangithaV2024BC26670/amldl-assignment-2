@@ -1,0 +1,24 @@
+Feature,MutualInformation
+NumberChildrenAtHome,0.105786
+Age,0.065226
+YearlyIncome,0.043367
+LogIncome,0.043116
+NumberCarsOwned,0.031525
+TotalChildren,0.027887
+ChildrenAwayFromHome,0.027374
+IsSingle,0.022495
+CarsPerChild,0.019929
+Occupation_Professional,0.007227
+EducationRank,0.005308
+Occupation_Manual,0.005266
+HasChildren,0.004527
+CountryRegionName_United Kingdom,0.00397
+Gender_M,0.00343
+IncomePerChild,0.001725
+Occupation_Management,0.001199
+HomeOwnerFlag,0.000189
+Occupation_Skilled Manual,0.0
+CountryRegionName_Canada,0.0
+CountryRegionName_France,0.0
+CountryRegionName_Germany,0.0
+CountryRegionName_United States,0.0

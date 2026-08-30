@@ -1,0 +1,5 @@
+Model,Accuracy,BalancedAcc,Precision,Recall,F1,ROC_AUC,PR_AUC
+PCA(13) + Logistic Regression,0.7726,0.7188,0.6976,0.5582,0.6202,0.8283,0.7238
+PCA(13) + Random Forest,0.7589,0.7189,0.6488,0.5995,0.6232,0.8153,0.707
+PCA(15) + Logistic Regression,0.7723,0.7179,0.6982,0.5555,0.6187,0.8276,0.7215
+PCA(15) + Random Forest,0.765,0.7258,0.6587,0.6086,0.6327,0.8163,0.7068

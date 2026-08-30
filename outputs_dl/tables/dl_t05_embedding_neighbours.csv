@@ -1,0 +1,4 @@
+Feature,ClosestPair,MostDistantPair
+Occupation,Clerical <-> Professional,Professional <-> Skilled Manual
+CountryRegionName,Canada <-> United Kingdom,France <-> United States
+Education,Partial College <-> Bachelors,High School <-> Graduate Degree

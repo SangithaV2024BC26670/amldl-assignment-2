@@ -1,0 +1,7 @@
+Feature,Levels,Corr_axis1_vs_buyrate,AbsCorr
+Education,5,0.645,0.645
+Occupation,5,0.514,0.514
+NumberChildrenAtHome,6,0.388,0.388
+TotalChildren,6,0.291,0.291
+NumberCarsOwned,5,0.107,0.107
+CountryRegionName,6,-0.062,0.062

@@ -1,0 +1,24 @@
+Feature,Importance,Std
+NumberChildrenAtHome,0.137005,0.008011
+Age,0.077895,0.004313
+IsSingle,0.063251,0.003709
+Gender_M,0.030136,0.001782
+YearlyIncome,0.021276,0.00296
+TotalChildren,0.000924,0.000408
+CountryRegionName_United Kingdom,0.000642,0.000275
+NumberCarsOwned,0.000444,0.000395
+CarsPerChild,0.000402,0.000191
+IncomePerChild,0.000316,0.000691
+HomeOwnerFlag,0.000242,4.5e-05
+Occupation_Professional,0.000175,0.000147
+Occupation_Manual,6.9e-05,4.5e-05
+Occupation_Skilled Manual,4.3e-05,1.7e-05
+ChildrenAwayFromHome,2.6e-05,4.9e-05
+CountryRegionName_France,6e-06,7e-06
+CountryRegionName_Canada,0.0,1e-05
+HasChildren,0.0,0.0
+LogIncome,0.0,0.0
+Occupation_Management,0.0,0.0
+CountryRegionName_United States,-7.9e-05,3.2e-05
+CountryRegionName_Germany,-0.00013,3.4e-05
+EducationRank,-0.000539,0.000188

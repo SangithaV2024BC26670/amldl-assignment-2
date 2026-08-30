@@ -1,0 +1,22 @@
+{
+  "framework": "PyTorch 2.7.1+cu118",
+  "device": "cuda",
+  "architecture": "Entity embeddings -> BN -> 128 -> 64 -> 1",
+  "trainable_parameters": 12406,
+  "embedded_features": 9,
+  "continuous_features": 6,
+  "train_rows": 11154,
+  "val_rows": 1969,
+  "test_rows": 3281,
+  "epochs_run": 60,
+  "best_epoch": 45,
+  "best_val_auc": 0.8653,
+  "network_test_ROC_AUC": 0.8548,
+  "network_test_F1": 0.6887,
+  "network_test_Accuracy": 0.7729,
+  "network_test_PR_AUC": 0.7671,
+  "benchmark_model": "HistGradientBoosting (tuned)",
+  "benchmark_test_ROC_AUC": 0.8606,
+  "delta_ROC_AUC": -0.0058,
+  "verdict": "The neural network does NOT beat the benchmark model."
+}

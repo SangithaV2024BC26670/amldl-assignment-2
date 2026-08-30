@@ -1,0 +1,23 @@
+{
+  "rows_after_dedup": 16404,
+  "features_used": 23,
+  "train_rows": 13123,
+  "test_rows": 3281,
+  "buy_rate_overall": 0.3325,
+  "pca_components_for_95pct": 15,
+  "selected_model": "HistGradientBoosting (tuned)",
+  "diagnostics_model": "HistGradientBoosting (tuned)",
+  "test_Accuracy": 0.7998,
+  "test_F1": 0.6703,
+  "test_ROC_AUC": 0.8606,
+  "test_PR_AUC": 0.7791,
+  "f1_optimal_threshold": 0.29,
+  "profit_optimal_threshold": 0.05,
+  "top_decile_lift": 2.78,
+  "capture_top30pct": 64.6,
+  "optimal_campaign_depth_pct": 90,
+  "margin_per_sale_assumed": 120.0,
+  "cost_per_contact_assumed": 2.0,
+  "breakeven_probability": 0.01667,
+  "targeted_vs_mailall_uplift_pct": 0.53
+}

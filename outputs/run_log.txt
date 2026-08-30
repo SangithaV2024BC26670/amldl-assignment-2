@@ -1,0 +1,263 @@
+
+==============================================================================
+STEP 1 | DATASET PREPARATION
+==============================================================================
+Customers file : (16519, 23)
+BikeBuyer file : (16519, 2)
+AveMonthSpend  : (16519, 2)
+Deduplication:
+  customers     : 16519 rows -> 16421 after exact-duplicate removal (98 dropped) -> 16404 after resolving 17 conflicting IDs
+  bike buyer    : 16519 rows -> 16408 after exact-duplicate removal (111 dropped) -> 16404 after resolving 4 conflicting IDs
+  spend         : 16519 rows -> 16421 after exact-duplicate removal (98 dropped) -> 16404 after resolving 17 conflicting IDs
+Joined dataset : (16404, 25)
+Dropped 10 identifier / PII columns
+Stripped whitespace from 5 categorical columns
+  Education levels now: ['Bachelors', 'Graduate Degree', 'High School', 'Partial College', 'Partial High School']
+Age (as at 1998-01-01) : 17.0 - 87.4 (median 34.4)
+Education ordinal-encoded: {'Partial High School': 0, 'High School': 1, 'Partial College': 2, 'Bachelors': 3, 'Graduate Degree': 4}
+One-hot encoded 4 nominal columns -> 11 dummies
+
+Target balance:
+  Non-buyers (0): 10949  (66.75%)
+  Buyers     (1): 5455  (33.25%)
+  Imbalance ratio: 1 : 2.01
+Final prepared shape: (16404, 27)
+
+==============================================================================
+STEP 1b | EXPLORATORY DATA ANALYSIS
+==============================================================================
+   [figure saved] outputs_aw\figures\aw_fig01_target_and_distributions.png
+   [figure saved] outputs_aw\figures\aw_fig02_purchase_rate_by_segment.png
+   [figure saved] outputs_aw\figures\aw_fig03_segment_heatmap.png
+    Occupation  Customers  BuyRate  MedianIncome  MedianAge
+  Professional       4922    44.37       99058.0  35.134839
+    Management       2718    37.38      118781.0  48.147844
+Skilled Manual       4038    28.11       66471.5  31.909651
+      Clerical       2597    23.72       49481.0  35.236140
+        Manual       2129    23.67       21722.0  29.264887
+   [table saved ] outputs_aw\tables\aw_t01_segment_profile.csv
+
+==============================================================================
+STEP 2 | FEATURE SELECTION
+==============================================================================
+Excluded as leakage : ['AveMonthSpend']
+Candidate features  : 24
+Removed (|corr| > 0.95) : ['MaritalStatus_S']
+Final feature count     : 23
+
+Top 12 features by mutual information:
+                Feature  MutualInformation
+   NumberChildrenAtHome           0.105786
+                    Age           0.065226
+           YearlyIncome           0.043367
+              LogIncome           0.043116
+        NumberCarsOwned           0.031525
+          TotalChildren           0.027887
+   ChildrenAwayFromHome           0.027374
+               IsSingle           0.022495
+           CarsPerChild           0.019929
+Occupation_Professional           0.007227
+          EducationRank           0.005308
+      Occupation_Manual           0.005266
+   [table saved ] outputs_aw\tables\aw_t02_feature_mutual_information.csv
+   [figure saved] outputs_aw\figures\aw_fig04_feature_selection_mi.png
+   [figure saved] outputs_aw\figures\aw_fig05_correlation_matrix.png
+
+==============================================================================
+STEP 3 | STRATIFIED TRAIN / TEST SPLIT
+==============================================================================
+This dataset is a customer cross-section, not a time series, so a
+random split is appropriate here - unlike a forecasting problem, where
+it would leak the future into the past. The split is STRATIFIED so that
+both partitions carry the same buyer proportion.
+
+TRAIN : 13123 rows | buy rate 33.25%
+TEST  : 3281 rows | buy rate 33.25%
+
+==============================================================================
+STEP 4 | MODEL TRAINING (BASELINE + CANDIDATE MODELS)
+==============================================================================
+Baseline - Majority Class      ->  Acc 0.6675  F1 0.0000  ROC-AUC 0.5000
+Baseline - Stratified Random   ->  Acc 0.5376  F1 0.3038  ROC-AUC 0.4789
+Logistic Regression            ->  Acc 0.7732  F1 0.6261  ROC-AUC 0.8295  PR-AUC 0.7249
+K-Nearest Neighbours           ->  Acc 0.7863  F1 0.6479  ROC-AUC 0.8335  PR-AUC 0.7262
+Decision Tree                  ->  Acc 0.7796  F1 0.6321  ROC-AUC 0.8341  PR-AUC 0.7227
+Random Forest                  ->  Acc 0.7824  F1 0.6547  ROC-AUC 0.8301  PR-AUC 0.7243
+Gradient Boosting              ->  Acc 0.7961  F1 0.6623  ROC-AUC 0.8576  PR-AUC 0.7749
+HistGradientBoosting           ->  Acc 0.7952  F1 0.6627  ROC-AUC 0.8550  PR-AUC 0.7714
+
+Untuned model comparison (20% stratified hold-out):
+                              Accuracy  BalancedAcc  Precision  Recall      F1  ROC_AUC  PR_AUC
+Model                                                                                          
+Baseline - Majority Class       0.6675       0.5000     0.0000  0.0000  0.0000   0.5000  0.3325
+Baseline - Stratified Random    0.5376       0.4789     0.3042  0.3034  0.3038   0.4789  0.3239
+Logistic Regression             0.7732       0.7225     0.6930  0.5710  0.6261   0.8295  0.7249
+K-Nearest Neighbours            0.7863       0.7374     0.7167  0.5912  0.6479   0.8335  0.7262
+Decision Tree                   0.7796       0.7268     0.7105  0.5692  0.6321   0.8341  0.7227
+Random Forest                   0.7824       0.7418     0.6929  0.6205  0.6547   0.8301  0.7243
+Gradient Boosting               0.7961       0.7472     0.7371  0.6013  0.6623   0.8576  0.7749
+HistGradientBoosting            0.7952       0.7475     0.7325  0.6049  0.6627   0.8550  0.7714
+   [table saved ] outputs_aw\tables\aw_t03_untuned_model_comparison.csv
+
+==============================================================================
+STEP 5 | HYPERPARAMETER TUNING (RandomizedSearchCV + validation curves)
+==============================================================================
+Random Forest  best CV ROC-AUC : 0.8588
+Random Forest  best params     : {'n_estimators': 200, 'min_samples_split': 20, 'min_samples_leaf': 8, 'max_features': 0.5, 'max_depth': 6, 'class_weight': None}
+HistGB         best CV ROC-AUC : 0.8654
+HistGB         best params     : {'min_samples_leaf': 40, 'max_leaf_nodes': 15, 'max_iter': 200, 'max_depth': 4, 'learning_rate': 0.03, 'l2_regularization': 0.0}
+Random Forest (tuned)          ->  Acc 0.7888  F1 0.6433  ROC-AUC 0.8505
+HistGradientBoosting (tuned)   ->  Acc 0.7998  F1 0.6703  ROC-AUC 0.8606
+   [table saved ] outputs_aw\tables\aw_t04_tuning_best_params.csv
+   [figure saved] outputs_aw\figures\aw_fig06_valcurve_rf_maxdepth.png
+   [figure saved] outputs_aw\figures\aw_fig07_valcurve_rf_minleaf.png
+   [figure saved] outputs_aw\figures\aw_fig08_valcurve_hgb_learningrate.png
+   [table saved ] outputs_aw\tables\aw_t05_validation_curves.csv
+
+==============================================================================
+STEP 6 | DIMENSIONALITY REDUCTION - PRINCIPAL COMPONENT ANALYSIS
+==============================================================================
+Original dimensionality     : 23
+Components for 90% variance : 13
+Components for 95% variance : 15  (34.8% reduction)
+   [figure saved] outputs_aw\figures\aw_fig09_pca_explained_variance.png
+   [table saved ] outputs_aw\tables\aw_t06_pca_explained_variance.csv
+   [figure saved] outputs_aw\figures\aw_fig10_pca_projection.png
+  PCA(13) + Logistic Regression      ->  ROC-AUC 0.8283  F1 0.6202
+  PCA(13) + Random Forest            ->  ROC-AUC 0.8153  F1 0.6232
+  PCA(15) + Logistic Regression      ->  ROC-AUC 0.8276  F1 0.6187
+  PCA(15) + Random Forest            ->  ROC-AUC 0.8163  F1 0.6327
+   [table saved ] outputs_aw\tables\aw_t07_pca_model_comparison.csv
+
+Best PCA variant retained in the master comparison: PCA(13) + Logistic Regression
+
+==============================================================================
+STEP 7 | ENSEMBLE TECHNIQUES (Bagging / Boosting / Voting / Stacking)
+==============================================================================
+Voting Ensemble    ->  ROC-AUC 0.8538  F1 0.6498
+Stacking Ensemble  ->  ROC-AUC 0.8601  F1 0.6650
+Stacking meta weights : rf 0.365, hgb 5.081, logit 0.359
+
+==============================================================================
+STEP 8 | FINAL MODEL COMPARISON AND SELECTION
+==============================================================================
+                               Accuracy  BalancedAcc  Precision  Recall      F1  ROC_AUC  PR_AUC
+Model                                                                                           
+HistGradientBoosting (tuned)     0.7998       0.7527     0.7406  0.6123  0.6703   0.8606  0.7791
+Stacking Ensemble                0.7973       0.7491     0.7383  0.6049  0.6650   0.8601  0.7780
+Gradient Boosting                0.7961       0.7472     0.7371  0.6013  0.6623   0.8576  0.7749
+HistGradientBoosting             0.7952       0.7475     0.7325  0.6049  0.6627   0.8550  0.7714
+Voting Ensemble                  0.7891       0.7387     0.7254  0.5885  0.6498   0.8538  0.7650
+Random Forest (tuned)            0.7888       0.7346     0.7336  0.5729  0.6433   0.8505  0.7629
+Decision Tree                    0.7796       0.7268     0.7105  0.5692  0.6321   0.8341  0.7227
+K-Nearest Neighbours             0.7863       0.7374     0.7167  0.5912  0.6479   0.8335  0.7262
+Random Forest                    0.7824       0.7418     0.6929  0.6205  0.6547   0.8301  0.7243
+Logistic Regression              0.7732       0.7225     0.6930  0.5710  0.6261   0.8295  0.7249
+PCA(13) + Logistic Regression    0.7726       0.7188     0.6976  0.5582  0.6202   0.8283  0.7238
+Baseline - Majority Class        0.6675       0.5000     0.0000  0.0000  0.0000   0.5000  0.3325
+Baseline - Stratified Random     0.5376       0.4789     0.3042  0.3034  0.3038   0.4789  0.3239
+   [table saved ] outputs_aw\tables\aw_t08_final_model_comparison.csv
+
+SELECTED MODEL: HistGradientBoosting (tuned)
+  Accuracy  0.7998
+  F1        0.6703
+  ROC_AUC   0.8606
+  PR_AUC    0.7791
+   [figure saved] outputs_aw\figures\aw_fig11_model_comparison.png
+
+==============================================================================
+STEP 9 | DIAGNOSTICS FOR THE SELECTED MODEL
+==============================================================================
+
+Classification report at the default 0.50 cut-off:
+              precision    recall  f1-score   support
+
+   Non-buyer     0.8222    0.8932    0.8562      2190
+       Buyer     0.7406    0.6123    0.6703      1091
+
+    accuracy                         0.7998      3281
+   macro avg     0.7814    0.7527    0.7633      3281
+weighted avg     0.7951    0.7998    0.7944      3281
+
+   [figure saved] outputs_aw\figures\aw_fig12_diagnostics.png
+   [table saved ] outputs_aw\tables\aw_t09_threshold_sweep.csv
+Threshold analysis on the hold-out set:
+  Default 0.500 -> F1 0.6703, profit 78,356
+  F1-optimal 0.290 -> F1 0.6841, recall 0.8258, profit 105,034
+  Profit-optimal 0.050 -> F1 0.5635, contacts 2778, profit 125,244
+   [figure saved] outputs_aw\figures\aw_fig13_threshold_optimisation.png
+
+Top 12 features by permutation importance (drop in ROC-AUC):
+                         Feature  Importance      Std
+            NumberChildrenAtHome    0.137005 0.008011
+                             Age    0.077895 0.004313
+                        IsSingle    0.063251 0.003709
+                        Gender_M    0.030136 0.001782
+                    YearlyIncome    0.021276 0.002960
+                   TotalChildren    0.000924 0.000408
+CountryRegionName_United Kingdom    0.000642 0.000275
+                 NumberCarsOwned    0.000444 0.000395
+                    CarsPerChild    0.000402 0.000191
+                  IncomePerChild    0.000316 0.000691
+                   HomeOwnerFlag    0.000242 0.000045
+         Occupation_Professional    0.000175 0.000147
+   [table saved ] outputs_aw\tables\aw_t10_permutation_importance.csv
+   [figure saved] outputs_aw\figures\aw_fig14_feature_importance.png
+
+==============================================================================
+STEP 10 | BUSINESS INTERPRETATION - CAMPAIGN TARGETING
+==============================================================================
+ Decile  Customers  Buyers  BuyRate  MinProba  Lift  CumBuyers  CumCapture_%  Profit  CumProfit
+      1        329     304    92.40  0.819602  2.78        304          27.9 35822.0    35822.0
+      2        328     225    68.60  0.636999  2.06        529          48.5 26344.0    62166.0
+      3        328     176    53.66  0.461110  1.61        705          64.6 20464.0    82630.0
+      4        328     113    34.45  0.351009  1.04        818          75.0 12904.0    95534.0
+      5        328     114    34.76  0.244801  1.05        932          85.4 13024.0   108558.0
+      6        328      70    21.34  0.174362  0.64       1002          91.8  7744.0   116302.0
+      7        328      48    14.63  0.125923  0.44       1050          96.2  5104.0   121406.0
+      8        328      30     9.15  0.078481  0.28       1080          99.0  2944.0   124350.0
+      9        328      11     3.35  0.025249  0.10       1091         100.0   664.0   125014.0
+     10        328       0     0.00  0.001613  0.00       1091         100.0  -656.0   124358.0
+   [table saved ] outputs_aw\tables\aw_t11_decile_lift_analysis.csv
+   [figure saved] outputs_aw\figures\aw_fig15_lift_gains_profit.png
+
+Campaign economics on the 3281-customer hold-out
+(assumptions: margin per sale 120, cost per contact 2.00)
+
+  Mail everyone      : 3281 contacts -> profit 124,358
+  Model-targeted     : 2953 contacts (top 90%) -> profit 125,014
+  Contacts avoided   : 328  (10.0% of the base)
+  Top-decile lift    : 2.78x the base buy rate
+  Buyers captured in the top 30%: 64.6%
+   [table saved ] outputs_aw\tables\aw_t12_campaign_economics.csv
+
+            Metric  MailEveryone  ModelTargeted
+     Contacts made        3281.0        2953.00
+   Campaign profit      124358.0      125014.00
+Profit per contact          37.9          42.33
+   Top-decile lift           1.0           2.78
+
+Break-even purchase probability = cost / margin = 1.67%
+Share of hold-out customers above break-even: 92.5%
+
+Sensitivity of targeting value to contact cost (margin held at 120):
+ CostPerContact  BreakEvenProb_%  OptimalDepth_%  MailAllProfit  TargetedProfit  ProfitGain  Uplift_%
+              1             0.83              90       127639.0        127967.0       328.0      0.26
+              2             1.67              90       124358.0        125014.0       656.0      0.53
+              5             4.17              80       114515.0        116475.0      1960.0      1.71
+             10             8.33              80        98110.0        103350.0      5240.0      5.34
+             20            16.67              60        65300.0         80860.0     15560.0     23.83
+             30            25.00              50        32490.0         62610.0     30120.0     92.71
+             40            33.33              50         -320.0         46200.0     46520.0       NaN
+             60            50.00              30       -65940.0         25500.0     91440.0       NaN
+   [table saved ] outputs_aw\tables\aw_t13_targeting_sensitivity.csv
+   [figure saved] outputs_aw\figures\aw_fig16_targeting_sensitivity.png
+   [table saved ] outputs_aw\tables\aw_t14_holdout_scores.csv
+
+   [summary saved] outputs_aw\tables\aw_t15_run_summary.json
+
+==============================================================================
+PIPELINE COMPLETE
+==============================================================================
+Figures : outputs_aw\figures
+Tables  : outputs_aw\tables
